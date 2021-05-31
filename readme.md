@@ -7,3 +7,5 @@
 - **Android**
 - **其他**
          1. [Markdown常用语法](https://github.com/adamin1990/blog-md-backup/blog/main/markdown_memo.md)
+         2. [Git设置代理](https://github.com/adamin1990/blog-md-backup/blog/main/gitproxy.md)
+
