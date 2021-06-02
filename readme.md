@@ -10,5 +10,6 @@
 
    3. [Go设置代理]([blog-md-backup/goproxy.md at main · adamin1990/blog-md-backup (github.com)](https://github.com/adamin1990/blog-md-backup/blob/main/goproxy.md))
 
-      
+   4. [Flutter 高德地图定位接入和工具类封装](https://github.com/adamin1990/blog-md-backup/blob/main/flutter_amap.md)
 
+      
