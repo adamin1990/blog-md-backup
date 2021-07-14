@@ -78,3 +78,16 @@ Java中泛型的工作原理是类型擦除，编译器在编译时会擦除类�
  非空性： 对任意非空x，x.equals(null) 始终返回false
  ~~~
 
+###### Java集合Collection
+
+~~~
+Set 无重复序列
+	TreeSet 底层使用TreeMap存储，而TreeMap底层使用红黑树，有序，查找时间复杂度O(logN)
+	HashSet 无需，可以实现快速查找，底层实现是哈希表,查找的时间复杂度O(1)
+	LinkedHashSet，有HashSet的查找速度，内部使用双向链表维护顺序
+List
+Queue
+~~~
+
+
+
