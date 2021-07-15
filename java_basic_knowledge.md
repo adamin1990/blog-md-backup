@@ -85,8 +85,29 @@ Set 无重复序列
 	TreeSet 底层使用TreeMap存储，而TreeMap底层使用红黑树，有序，查找时间复杂度O(logN)
 	HashSet 无需，可以实现快速查找，底层实现是哈希表,查找的时间复杂度O(1)
 	LinkedHashSet，有HashSet的查找速度，内部使用双向链表维护顺序
-List
+List 可以有重复数据
+	ArrayList基于动态数组实现，所以可以随机访问
+	Vector，和ArrayList类似，但是线程安全
+	LinkedList，基于双向链表实现，顺序访问，插入删除速度快，可以用作栈，队列，双向队列
 Queue
+	PriorityQueue，基于堆实现，可以实现优先级队列
+	PriorityBlockingQueue，类似PriorityQueque，但是是线程安全的，操作使用ReentrantLock保持原子性。
+~~~
+
+###### Java映射Map
+
+~~~
+Map是具有键值对应关系的对象，不能重复
+	HashMap:数据结构数组+链表（结合成哈希表），jdk1.8加入红黑树，默认桶大小是16，加载因子0.75，当单个链表超过8个元素的时候用链表转成红黑树
+	HashTable：和HashMap类似，但是是线程安全的，使用synchronized
+	ConncurrentHashMap:JDK1.7是分段锁，JDK1.8先使用CAS操作，如果CAS操作失败则使用系统自带的synchronized
+	LinkedHashMap:继承自HashMap，内部维护双向链表维护插入顺序或LRU顺序
+~~~
+
+###### CAS原理
+
+~~~
+compare and swap，比较和交换，是JDK提供的非阻塞原子性操作，
 ~~~
 
 
