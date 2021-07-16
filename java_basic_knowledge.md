@@ -100,14 +100,24 @@ Queue
 Map是具有键值对应关系的对象，不能重复
 	HashMap:数据结构数组+链表（结合成哈希表），jdk1.8加入红黑树，默认桶大小是16，加载因子0.75，当单个链表超过8个元素的时候用链表转成红黑树
 	HashTable：和HashMap类似，但是是线程安全的，使用synchronized
-	ConncurrentHashMap:JDK1.7是分段锁，JDK1.8先使用CAS操作，如果CAS操作失败则使用系统自带的synchronized
+	ConcurrentHashMap:JDK1.7是分段锁，JDK1.8先使用CAS操作，如果CAS操作失败则使用系统自带的synchronized
 	LinkedHashMap:继承自HashMap，内部维护双向链表维护插入顺序或LRU顺序
 ~~~
 
-###### CAS原理
+###### CAS原理，使用场景，缺点
 
 ~~~
-compare and swap，比较和交换，是JDK提供的非阻塞原子性操作，
+compare and swap，比较和交换，是JDK提供的非阻塞原子性操作，首先获取预期值(当前变量最新值)A，然后进行CAS操作，和内存值V进行比较，如果A和V相等，就把当前变量改成B(更新值)，如果A和B不相等则不修改
+
+CAS在java中的使用场景：
+原子类，比如AtomicInteger，AtomicLong，AtomicBoolean
+乐观锁
+JDK1.8之后的ConcurrentHashMap
+
+
+CAS缺点：
+ABA问题，多线程需改同一个变量，线程1获取预期值A时候，线程2先把内存值改成了B,线程3又把内存值改成了A,这样线程1就认为A没有改变，解决ABA问题可以使用版本号比较
+自旋时间过长占用资源
 ~~~
 
 
