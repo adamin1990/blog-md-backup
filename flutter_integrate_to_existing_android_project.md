@@ -27,7 +27,7 @@ Android Studio自动集成Flutter module是非常方便的，可以在项目中�
 
 使用Android Studio菜单栏的**File>New>New Module...**，你可以创建一个新的Flutter module集成，或者选择一个之前创建的Flutter module
 
-<img src="assets/as_create_flutter_module.png" alt="android studio create flutter module" style="zoom: 50%;" />
+<img src="https://www.lixiaopeng.top/Upload/image/ueditor/20210907/1631005453163867.png" alt="android studio create flutter module" style="zoom: 50%;" />
 
 Android Studio插件会自动配置Android工程，添加Flutter module作为依赖。
 
