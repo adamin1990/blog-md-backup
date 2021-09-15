@@ -7,3 +7,29 @@
 	### 享元模式（FlyWeight）
 
 享元模式是23种Gof设计模式结构化模式的一种，它在处理大量具有简单重复元素，单独存储会使用大量内存的时候非常有用，通常做法是把共享的数据存储在外部的数据结构里面，使用的时候把他们传递给对象。
+
+**Handler.obtainMessage**方法内部也是调用的**Message.obtain**,所以只看后者：
+
+~~~
+    public static final Object sPoolSync = new Object();
+    private static Message sPool;
+    private static int sPoolSize = 0; #当前消息池的大小
+    ....
+    ....
+    private static final int MAX_POOL_SIZE = 50;  #缓存消息池最大容量
+  public static Message obtain() {
+        synchronized (sPoolSync) {
+            if (sPool != null) {
+                Message m = sPool;
+                sPool = m.next;
+                m.next = null;
+                m.flags = 0; // clear in-use flag
+                sPoolSize--;
+                return m;
+            }
+        }
+        return new Message();
+    }
+~~~
+
+sPool如果是空，则new一个新的Message,非空的话从缓存池获取对象，并清空获取到的Message对象的flags,消息池当前大小减1。
