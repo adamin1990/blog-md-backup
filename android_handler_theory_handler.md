@@ -9,3 +9,93 @@
 ​	post或send的时候可以允许item在消息队列准备好的时候立即处理，或者定义一个时间延迟或确切的时间处理。
 
 ​	当一个应用的进程创建完，它的主线程专注运行一个消息队列,负责管理高级别的应用对象（Activity，BroadcastReceiver等）和他们创建的window，我们可以创建自己的子线程，并通过Handler和主线程通信。这样是通过在子线程里调用post或sendMessage方法完成。然后Runnable或Message将在Handler的消息队列里调度，在合适的时候处理。
+
+### 构造函数
+
+Handler总共有7个构造函数
+
+~~~
+#无参构造函数，内部调用6，callback传null，async传false
+1. public Handler() {
+        this(null, false);
+    }
+#设置消息处理回调，内部调用6，async传false
+2. public Handler(@Nullable Callback callback) {
+        this(callback, false);
+    }
+  #设置Looper，这样就不用调用Looper.prepare方法，内部调用7
+3. public Handler(@NonNull Looper looper) {
+        this(looper, null, false);
+    }
+    #设置Looper和回调，内部调用7
+4. public Handler(@NonNull Looper looper, @Nullable Callback callback) {
+        this(looper, callback, false);
+    }
+    #设置消息是否异步，内部调用6
+5. public Handler(boolean async) {
+        this(null, async);
+    }
+    #设置回调和是否异步，内部检测looper是否为空，所以所有内部调用这个方法的构造函数都需要先调用Looper.prepare方法初始化Looper和MessageQueue
+6. public Handler(@Nullable Callback callback, boolean async) {
+        if (FIND_POTENTIAL_LEAKS) {
+            final Class<? extends Handler> klass = getClass();
+            if ((klass.isAnonymousClass() || klass.isMemberClass() || klass.isLocalClass()) &&
+                    (klass.getModifiers() & Modifier.STATIC) == 0) {
+                Log.w(TAG, "The following Handler class should be static or leaks might occur: " +
+                    klass.getCanonicalName());
+            }
+        }
+
+        mLooper = Looper.myLooper();
+        if (mLooper == null) {
+            throw new RuntimeException(
+                "Can't create handler inside thread " + Thread.currentThread()
+                        + " that has not called Looper.prepare()");
+        }
+        mQueue = mLooper.mQueue;
+        mCallback = callback;
+        mAsynchronous = async;
+    }
+ #设置Looper，回调，是否异步   
+7. public Handler(@NonNull Looper looper, @Nullable Callback callback, boolean async) {
+        mLooper = looper;
+        mQueue = looper.mQueue;
+        mCallback = callback;
+        mAsynchronous = async;
+    }
+
+
+~~~
+
+​	Handler总共有7个构造函数，分别应用在不同场景下，可以设置消息是否异步，设置Looper，回调。
+
+### 消息处理 
+
+消息处理使用dispatchMessage方法，在Looper的loop中，获取到Message以后，通过**msg.target.dispatchMessage**调用，msg.target是Handler实例。
+
+~~~
+   private static void handleCallback(Message message) {
+        message.callback.run();
+    }
+        public void handleMessage(@NonNull Message msg) {
+    }
+    
+    /**
+     * Handle system messages here.
+     */
+    public void dispatchMessage(@NonNull Message msg) {
+        if (msg.callback != null) { //优先处理Message的callback
+            handleCallback(msg);
+        } else {
+            if (mCallback != null) {  //其次处理Handler的Callback对象
+                if (mCallback.handleMessage(msg)) {
+                    return;
+                }
+            }
+            //msg.callback和Handler的Callback对象都是空的，走Handler的handleMessage方法
+            handleMessage(msg);
+        }
+    }
+~~~
+
+从上面可以看出消息处理的优先级是msg.callback>Handler的mCallback>Handler的handleMessage方法。
