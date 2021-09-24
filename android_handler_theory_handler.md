@@ -98,4 +98,48 @@ Handler总共有7个构造函数
     }
 ~~~
 
-从上面可以看出消息处理的优先级是msg.callback>Handler的mCallback>Handler的handleMessage方法。
+从上面可以看出消息处理的优先级是**msg.callback>Handler的mCallback>Handler的handleMessage方法**。msg.callback可以在构造Message的时候设置，mCallback可以在上述构造函数中**2，4，6，7**中设置，handleMessage方法可以在我们继承Handler的时候重写该方法。
+
+### 发送消息 
+
+​	文章开头讲过，发送消息主要有两个版本，post和send。post版本会传递一个Runnable对象，封装成Message的callback，然后加入消息队列，这样post版本会在dispatchMessage的时候，优先执行msg.callback。send版本会直接传递一个Message对象。
+
+​	不论是post版本还是send版本，都会调用Handler的**sendMesssageAtTime**方法：
+
+~~~
+ public boolean sendMessageAtTime(@NonNull Message msg, long uptimeMillis) {
+        MessageQueue queue = mQueue;
+        if (queue == null) {
+            RuntimeException e = new RuntimeException(
+                    this + " sendMessageAtTime() called with no mQueue");
+            Log.w("Looper", e.getMessage(), e);
+            return false;
+        }
+        return enqueueMessage(queue, msg, uptimeMillis);
+    }
+
+~~~
+
+​	然后再调用Handler的enqueueMessage方法
+
+~~~
+    private boolean enqueueMessage(@NonNull MessageQueue queue, @NonNull Message msg,
+            long uptimeMillis) {
+        msg.target = this;
+        msg.workSourceUid = ThreadLocalWorkSource.getUid();
+
+        if (mAsynchronous) {
+            msg.setAsynchronous(true);
+        }
+        return queue.enqueueMessage(msg, uptimeMillis);
+    }
+~~~
+
+最终调用MessageQueue的enqueueMessage方法，把消息插入到消息队列。
+
+### 移除消息
+
+------
+
+
+
