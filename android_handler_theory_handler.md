@@ -612,7 +612,7 @@ H类是ActivityThread的内部类，主要用来处理系统消息比如应用�
 
 ​	主线程的Handler创建的时候，ActivityThread的main方法里自动帮我们调用了Looper.prepareMainLooper和Looper.loop方法，而我们在子线程创建Handler的时候，首先要调用Looper .prepare方法创建looper对象和MessageQueue对象，再创建Handler对象，再调用Looper.loop开启消息循环，否则Hanlder实例化的时候会直接抛出异常。
 
-​	HandlerThread继承自Thread，内部持有Looper和Handler实例，在run方法里自动调用Looper.prepare方法和Looper.loop方法自动准备好消息队列和循环，当首次调用getThreadHandler方法是，才会初始化Handler，使用HanlderThread能够简化在子线程创建Hanlder。免去调用Looper.prepare和Looper.loop方法。
+​	HandlerThread继承自Thread，内部持有Looper和Handler实例，在run方法里自动调用Looper.prepare方法和Looper.loop方法自动准备好消息队列和循环，使用HanlderThread能够简化在子线程创建Hanlder。免去调用Looper.prepare和Looper.loop方法。
 
 
 
@@ -626,4 +626,4 @@ Handler处理消息的方法是dispatchMessge方法，优先处理msg.callback,�
 
 Handler移除消息的方法最终都是调用MessageQueue的移除方法。
 
-HandlerThread继承自Thread，简化了在子线程创建Handler的过程，run方法自动调用Looper.prepare和Looper.loop,内部持有的Hanlder对象是懒加载的，首次调用getThreadHandler方法才会去实例化。
+HandlerThread继承自Thread，简化了在子线程创建Handler的过程，run方法自动调用Looper.prepare和Looper.loop。
