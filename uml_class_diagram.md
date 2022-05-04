@@ -132,3 +132,7 @@ A class diagram may also have notes attached to classes or relationships.
 类图可以有附加在类或关系上的注释。  
 ![uml gui](assets/uml-gui.png)  
 
+## Related link 
+
+[uml class diagram tutorial](https://www.visual-paradigm.com/guide/uml-unified-modeling-language/uml-class-diagram-tutorial/)
+
